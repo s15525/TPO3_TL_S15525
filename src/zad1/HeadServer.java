@@ -18,7 +18,8 @@ public class HeadServer {
     private DataInputStream inServer = null;
     private DataInputStream  inputClient   = null;
     private DataOutputStream outputClient     = null;
-    private Map<String,Integer> mapServer = new HashMap<>();
+
+    private Map<String,Integer> mapServer = Map.of("Rosyjski",5001);
 
     public void server(int port) {
 

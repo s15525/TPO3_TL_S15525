@@ -6,7 +6,7 @@ import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 
-public class PLServer {
+public class RUSServer {
     private Socket socket = null;
     private Socket socketSend = null;
     private ServerSocket server = null;
