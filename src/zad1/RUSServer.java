@@ -16,18 +16,22 @@ public class RUSServer {
 
         try {
             server = new ServerSocket(port);
-            socket = server.accept();
 
-            in = new DataInputStream(
-                    new BufferedInputStream(socket.getInputStream()));
+
 
             String line = "";
 
+            while (!line.equals("Over")) {
 
-            line = in.readUTF();
-            System.out.println(line);
+                socket = server.accept();
+                in = new DataInputStream(
+                        new BufferedInputStream(socket.getInputStream()));
+
+                line = in.readUTF();
+                System.out.println(line);
+
+            }
             System.out.println("Closing connection");
-
             socket.close();
             in.close();
         } catch (IOException i) {

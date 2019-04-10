@@ -16,10 +16,10 @@ public class HeadServer {
     private Socket socketSend = null;
     private ServerSocket server = null;
     private DataInputStream inServer = null;
-    private DataInputStream  inputClient   = null;
-    private DataOutputStream outputClient     = null;
+    private DataInputStream inputClient = null;
+    private DataOutputStream outputClient = null;
 
-    private Map<String,Integer> mapServer = Map.of("Rosyjski",5001);
+    private Map<String, Integer> mapServer = Map.of("Rosyjski", 5001);
 
     public void server(int port) {
 
@@ -37,24 +37,26 @@ public class HeadServer {
 
 
             String line = "";
-            line = inServer.readUTF();
-            System.out.println(line);
+            while (!line.equals("Over")) {
+                line = inServer.readUTF();
+                System.out.println(line);
+                //serwer staje sie klientem
+                socketSend = new Socket("localhost", 5001);
+                inputClient = new DataInputStream(System.in);
+                outputClient = new DataOutputStream(socketSend.getOutputStream());
+                outputClient.writeUTF(line);
 
-            //serwer staje sie klientem
-            socketSend = new Socket("localhost", 5001);
-            inputClient = new DataInputStream(System.in);
-            outputClient = new DataOutputStream(socketSend.getOutputStream());
-            outputClient.writeUTF(line);
+            }
             System.out.println("Closing connection");
-
             socket.close();
             inServer.close();
 
-        }catch (IOException i) {
+        } catch (IOException i) {
             System.out.println(i);
         }
     }
-    public static void main (String args[]){
+
+    public static void main(String args[]) {
         int headServerPort = 5000;
         HeadServer headServer = new HeadServer();
         headServer.server(headServerPort);
