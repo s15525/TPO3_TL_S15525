@@ -37,8 +37,8 @@ public class RUSServer {
     }
 
     public static void main(String args[]) {
-        int headServerPort = 5001;
-        HeadServer headServer = new HeadServer();
-        headServer.server(headServerPort);
+        int RUSServerPort = 5001;
+        RUSServer rusServer = new RUSServer();
+        rusServer.server(RUSServerPort);
     }
 }
