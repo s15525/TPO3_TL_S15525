@@ -6,7 +6,6 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.HashMap;
 import java.util.Map;
 
 
@@ -19,33 +18,31 @@ public class HeadServer {
     private DataInputStream inputClient = null;
     private DataOutputStream outputClient = null;
 
-    private Map<String, Integer> mapServer = Map.of("Rosyjski", 5001);
+    private Map<String, Integer> mapServer = Map.of("RUS", 5001);
 
     public void server(int port) {
 
         try {
             server = new ServerSocket(port);
             System.out.println("Server started");
-
             System.out.println("Waiting for a client ...");
-
             socket = server.accept();
-            System.out.println("Client accepted");
-
             inServer = new DataInputStream(
                     new BufferedInputStream(socket.getInputStream()));
 
-
+            System.out.println("Client accepted");
             String line = "";
             while (!line.equals("Over")) {
                 line = inServer.readUTF();
                 System.out.println(line);
-                //serwer staje sie klientem
-                socketSend = new Socket("localhost", 5001);
+                String[] splitLine = line.split(";");
+
+                System.out.println();
+
+                socketSend = new Socket("localhost", mapServer.get(splitLine[0]));
                 inputClient = new DataInputStream(System.in);
                 outputClient = new DataOutputStream(socketSend.getOutputStream());
-                outputClient.writeUTF(line);
-
+                outputClient.writeUTF(splitLine[1] +";"+splitLine[2]);
             }
             System.out.println("Closing connection");
             socket.close();
