@@ -18,7 +18,7 @@ public class HeadServer {
     private DataInputStream inputClient = null;
     private DataOutputStream outputClient = null;
 
-    private Map<String, Integer> mapServer = Map.of("RUS", 5001);
+    public static Map<String, Integer> mapServer = Map.of("RUS", 5001, "FR", 5002, "ANG", 5003);
 
     public void server(int port) {
 
@@ -38,13 +38,15 @@ public class HeadServer {
                 String[] splitLine = line.split(";");
 
                 System.out.println();
-
-                socketSend = new Socket("localhost", mapServer.get(splitLine[0]));
-                inputClient = new DataInputStream(System.in);
-                outputClient = new DataOutputStream(socketSend.getOutputStream());
-                outputClient.writeUTF(splitLine[1] +";"+splitLine[2]);
+                try {
+                    socketSend = new Socket("localhost", mapServer.get(splitLine[0]));
+                    inputClient = new DataInputStream(System.in);
+                    outputClient = new DataOutputStream(socketSend.getOutputStream());
+                    outputClient.writeUTF(splitLine[1] + ";" + splitLine[2]);
+                }catch (NullPointerException a){
+                    System.out.println("Closing connection");
+                }
             }
-            System.out.println("Closing connection");
             socket.close();
             inServer.close();
 

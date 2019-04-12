@@ -1,5 +1,6 @@
 package zad1;
 
+import javax.swing.*;
 import java.net.*;
 import java.io.*;
 
@@ -9,7 +10,7 @@ public class Client {
     private Socket waitForConnect = null;
     private ServerSocket socketCome = null;
     private DataInputStream input = null;
-    private DataInputStream input2 = null;
+    private DataInputStream inputCome = null;
     private DataOutputStream out = null;
 
 
@@ -20,26 +21,31 @@ public class Client {
             System.out.println("Connected");
             input = new DataInputStream(System.in);
             out = new DataOutputStream(socketSend.getOutputStream());
-            socketCome = new ServerSocket(5002);
+
             String line = "";
 
 
             while (!line.equals("Over")) {
                 //Jezyk;Slowo;Port
-
-                line = input.readLine();
-                line = line + ";" + socketCome.getLocalPort();
+                socketCome = new ServerSocket(5004);
+                //line = input.readLine();
+                line = Window.intialize() + ";" + socketCome.getLocalPort();
+                if (line.length() < 10){
+                    line = "Over";
+                }
                 out.writeUTF(line);
                 //Oczekiwanie na odpowiedz
                 waitForConnect = socketCome.accept();
-                input2 = new DataInputStream(
+                inputCome = new DataInputStream(
                         new BufferedInputStream(waitForConnect.getInputStream()));
 
-                line = input2.readUTF();
+                line = inputCome.readUTF();
+                JOptionPane.showMessageDialog(null, line, "InfoBox", JOptionPane.INFORMATION_MESSAGE);
                 System.out.println(line);
+                socketCome.close();
             }
 
-            input2.close();
+            inputCome.close();
             input.close();
             out.close();
             socketCome.close();
@@ -51,6 +57,6 @@ public class Client {
     }
 
     public static void main(String args[]) {
-        Client client = new Client("localhost", 5000);
+       Client client = new Client("localhost", 5000);
     }
 }

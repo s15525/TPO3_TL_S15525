@@ -17,16 +17,14 @@ public class RUSServer {
     private DataInputStream inputServer = null;
     private DataOutputStream outputServer = null;
 
-    private Map<String, String> mapWords = Map.of("Pies", "собака", "Dziewczyna", "девушка", "Chlopak" , "мальчик" , "Warszwa" , "Варшава" );
+    private Map<String, String> mapWords = Map.of("Pies", "собака", "Dziewczyna", "девушка", "Chlopak", "мальчик", "Warszwa", "Варшава");
 
     public void server(int port) {
 
         try {
             server = new ServerSocket(port);
             System.out.println("Server started");
-
             System.out.println("Waiting for a client ...");
-
 
             String line = "";
             while (!line.equals("Over")) {
@@ -36,17 +34,15 @@ public class RUSServer {
                         new BufferedInputStream(socket.getInputStream()));
                 line = inServer.readUTF();
                 String[] splitLine = line.split(";");
-//                System.out.println(splitLine[0]);
-//                System.out.println(mapWords.get(splitLine[0]));
-
-//               System.out.println(line);
-
                 //serwer staje sie klientem
-
                 socketSend = new Socket("localhost", Integer.parseInt(splitLine[1]));
                 inputServer = new DataInputStream(System.in);
                 outputServer = new DataOutputStream(socketSend.getOutputStream());
-                outputServer.writeUTF(mapWords.get(splitLine[0]));
+                try {
+                    outputServer.writeUTF(mapWords.get(splitLine[0]));
+                }catch (NullPointerException a){
+                    outputServer.writeUTF("Slowa nie znaleziono w slowniku Rosyjskim");
+                }
 
             }
             System.out.println("Closing connection");
